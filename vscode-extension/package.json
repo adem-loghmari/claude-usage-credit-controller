@@ -1,0 +1,70 @@
+{
+  "name": "usage-control-vscode",
+  "displayName": "usage-control",
+  "description": "Calm Claude Code spend context in your status bar",
+  "version": "0.1.0",
+  "publisher": "usage-control",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "main": "./dist/extension.js",
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "usageControl.showDetails",
+        "title": "usage-control: Show Session Details"
+      }
+    ],
+    "configuration": {
+      "title": "usage-control",
+      "properties": {
+        "usageControl.checkpointStepUSD": {
+          "type": "number",
+          "default": 1,
+          "minimum": 0.25,
+          "description": "Notify each time session spend crosses another multiple of this many dollars."
+        },
+        "usageControl.tone": {
+          "type": "string",
+          "enum": [
+            "chill",
+            "numbers"
+          ],
+          "default": "chill",
+          "enumDescriptions": [
+            "Calm, calibrated context (default)",
+            "Raw per-tier breakdown with token counts"
+          ],
+          "description": "How checkpoint notifications are phrased."
+        },
+        "usageControl.pollMinutes": {
+          "type": "number",
+          "default": 2,
+          "minimum": 0.5,
+          "description": "How often to re-read the Claude Code session logs."
+        },
+        "usageControl.showNotifications": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show a notification when a checkpoint is crossed (the status bar always updates)."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "build": "esbuild src/extension.ts --bundle --outfile=dist/extension.js --format=cjs --platform=node --external:vscode",
+    "package": "npx @vscode/vsce package --no-dependencies"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.90.0",
+    "esbuild": "^0.25.0",
+    "typescript": "^5.7.0"
+  }
+}
